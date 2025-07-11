@@ -1,47 +1,47 @@
-# HttpRequestClass 使用文档
+# HttpRequestClass Usage Documentation
 
-本文档为 PHP 中使用 `HttpRequestClass` 及其相关类（`CookieManager`、`HttpRequestParameter`、`HttpResponseData`）提供全面指南。这些类旨在简化 HTTP 请求操作，支持 GET、POST 等方法，并提供 cookie、头信息、代理和 SSL 配置功能。
+This document provides a comprehensive guide for using `HttpRequestClass` and its related classes (`CookieManager`, `HttpRequestParameter`, `HttpResponseData`) in PHP. These classes are designed to simplify HTTP request operations, supporting methods like GET, POST, and offering cookie, header, proxy, and SSL configuration features.
 
-## 目录
-1. [概述](#概述)
-2. [目录结构](#目录结构)
-3. [关键类及其用途](#关键类及其用途)
-4. [安装与设置](#安装与设置)
-5. [基本使用](#基本使用)
-    - [发起 GET 请求](#发起-get-请求)
-    - [发起 POST 请求](#发起-post-请求)
-    - [设置自定义头信息](#设置自定义头信息)
-    - [管理 cookie](#管理-cookie)
-    - [配置代理](#配置代理)
-    - [SSL 验证](#ssl-验证)
-6. [高级使用](#高级使用)
-    - [自定义 HTTP 方法](#自定义-http-方法)
-    - [处理重定向](#处理重定向)
-    - [设置超时](#设置超时)
-    - [自定义 DNS 解析](#自定义-dns-解析)
-7. [错误处理](#错误处理)
-8. [示例代码](#示例代码)
-9. [类参考](#类参考)
+## Table of Contents
+1. [Overview](#overview)
+2. [Directory Structure](#directory-structure)
+3. [Key Classes and Their Purposes](#key-classes-and-their-purposes)
+4. [Installation and Setup](#installation-and-setup)
+5. [Basic Usage](#basic-usage)
+    - [Initiate GET Request](#initiate-get-request)
+    - [Initiate POST Request](#initiate-post-request)
+    - [Set Custom Headers](#set-custom-headers)
+    - [Manage Cookies](#manage-cookies)
+    - [Configure Proxy](#configure-proxy)
+    - [SSL Verification](#ssl-verification)
+6. [Advanced Usage](#advanced-usage)
+    - [Custom HTTP Methods](#custom-http-methods)
+    - [Handle Redirects](#handle-redirects)
+    - [Set Timeout](#set-timeout)
+    - [Custom DNS Resolution](#custom-dns-resolution)
+7. [Error Handling](#error-handling)
+8. [Example Code](#example-code)
+9. [Class Reference](#class-reference)
     - [HttpRequestClass](#httprequestclass)
     - [CookieManager](#cookiemanager)
     - [HttpRequestParameter](#httprequestparameter)
     - [HttpResponseData](#httpresponsedata)
 
-## 概述
+## Overview
 
-`HttpRequestClass` 是一个基于 PHP 的类，利用 cURL 库执行 HTTP 请求。它提供灵活的链式接口，用于配置请求、管理 cookie、设置头信息和处理响应。辅助类包括 `CookieManager`（处理 cookie）、`HttpRequestParameter`（存储请求参数）和 `HttpResponseData`（存储响应数据）。
+`HttpRequestClass` is a PHP-based class that utilizes the cURL library to execute HTTP requests. It offers a flexible chainable interface for configuring requests, managing cookies, setting headers, and handling responses. Supporting classes include `CookieManager` (for cookie handling), `HttpRequestParameter` (for storing request parameters), and `HttpResponseData` (for storing response data).
 
-主要特性包括：
-- 支持多种 HTTP 方法（GET、POST、HEAD、PUT、OPTIONS、DELETE、TRACE、CONNECT）。
-- 通过 `CookieManager` 实现 cookie 管理。
-- 支持字符串或数组格式的灵活头信息配置。
-- 提供代理支持（含认证）。
-- 支持 SSL 验证选项。
-- 自动处理响应头、cookie 和主体内容。
+Key features include:
+- Support for multiple HTTP methods (GET, POST, HEAD, PUT, OPTIONS, DELETE, TRACE, CONNECT).
+- Cookie management via `CookieManager`.
+- Flexible header configuration in string or array format.
+- Proxy support (with authentication).
+- SSL verification options.
+- Automatic handling of response headers, cookies, and body content.
 
-## 目录结构
+## Directory Structure
 
-项目组织结构如下：
+The project is organized as follows:
 
 ```
 EasyHTTP
@@ -54,75 +54,75 @@ EasyHTTP
 └── autoload.php
 ```
 
-- **`EasyHTTP/`**：根目录，包含子目录和关键文件。
-    - **`EasyHTTP/`**：存放核心 PHP 类。
-        - **`CookieManager.php`**：管理 cookie 操作。
-        - **`HttpRequestClass.php`**：核心请求执行类。
-        - **`HttpRequestParameter.php`**：管理请求参数。
-        - **`HttpResponseData.php`**：存储响应数据。
-    - **`Demo.php`**：位于根目录，包含使用示例。
-    - **`autoload.php`**：位于根目录，实现 SPL 自动加载。
+- **`EasyHTTP/`**: Root directory containing subdirectories and key files.
+  - **`EasyHTTP/`**: Houses core PHP classes.
+    - **`CookieManager.php`**: Manages cookie operations.
+    - **`HttpRequestClass.php`**: Core request execution class.
+    - **`HttpRequestParameter.php`**: Manages request parameters.
+    - **`HttpResponseData.php`**: Stores response data.
+  - **`Demo.php`**: Located in the root directory, contains usage examples.
+  - **`autoload.php`**: Located in the root directory, implements SPL autoloading.
 
-## 关键类及其用途
+## Key Classes and Their Purposes
 
-- **HttpRequestClass**：主类，用于发起和发送 HTTP 请求，管理 cURL 句柄并协调其他类。
-- **CookieManager**：处理 cookie 存储、设置和获取，支持单个 cookie 和 cookie 字符串。
-- **HttpRequestParameter**：存储请求参数（如 URL、方法、头信息、代理设置），提供链式配置接口。
-- **HttpResponseData**：存储响应数据，包括状态码、头信息、主体和 cookie。
+- **HttpRequestClass**: Main class for initiating and sending HTTP requests, managing cURL handles and coordinating other classes.
+- **CookieManager**: Handles cookie storage, setting, and retrieval, supporting single cookies and cookie strings.
+- **HttpRequestParameter**: Stores request parameters (e.g., URL, method, headers, proxy settings), providing a chainable configuration interface.
+- **HttpResponseData**: Stores response data, including status code, headers, body, and cookies.
 
-## 安装与设置
+## Installation and Setup
 
-1. 确保服务器安装 PHP 并启用 cURL 扩展。
-2. 将提供的 PHP 代码保存为文件（例如 `HttpRequestClass.php`）。
-3. 在 PHP 项目中包含文件：
+1. Ensure the server has PHP installed with the cURL extension enabled.
+2. Save the provided PHP code as a file (e.g., `HttpRequestClass.php`).
+3. Include the file in your PHP project:
 
 ```php
 require_once 'HttpRequestClass.php';
 ```
 
-## 基本使用
+## Basic Usage
 
-### 发起 GET 请求
+### Initiate GET Request
 
-执行简单 GET 请求：
+Execute a simple GET request:
 
 ```php
 try {
     $response = (new HttpRequestClass("https://www.example.com"))->Send()->GetResponse();
-    echo $response->body; // 输出响应主体
-    echo $response->cookieManager->getCookieString(); // 输出 cookie
+    echo $response->body; // Outputs response body
+    echo $response->cookieManager->getCookieString(); // Outputs cookies
 } catch (Exception $e) {
-    echo "错误: " . $e->getMessage();
+    echo "Error: " . $e->getMessage();
 }
 ```
 
-或使用 `open` 方法：
+Or use the `open` method:
 
 ```php
 $http = new HttpRequestClass();
 $http->open("https://www.example.com");
 $http->Send();
-echo $http->GetResponse()->body; // 输出响应主体
+echo $http->GetResponse()->body; // Outputs response body
 ```
 
-### 发起 POST 请求
+### Initiate POST Request
 
-执行带数据的 POST 请求：
+Execute a POST request with data:
 
 ```php
 try {
     $response = (new HttpRequestClass("https://www.example.com", 1))
         ->Send(["KeyWord" => "Post request"])
         ->GetResponse();
-    echo $response->body; // 输出响应主体
+    echo $response->body; // Outputs response body
 } catch (Exception $e) {
-    echo "错误: " . $e->getMessage();
+    echo "Error: " . $e->getMessage();
 }
 ```
 
-### 设置自定义头信息
+### Set Custom Headers
 
-使用数组或字符串设置头信息：
+Set headers using an array or string:
 
 ```php
 $http = new HttpRequestClass("https://www.example.com");
@@ -133,27 +133,27 @@ $http->set()->set_headers_arr([
 $response = $http->Send()->GetResponse();
 ```
 
-### 管理 cookie
+### Manage Cookies
 
-使用 `CookieManager` 设置 cookie：
+Set cookies using `CookieManager`:
 
 ```php
 $http = new HttpRequestClass("https://www.example.com");
-$http->CookieManager()->setCookie("session_id", "abc123"); // 设置单个 cookie
-$http->CookieManager()->setCookieString("user_id=xyz789; theme=dark"); // 设置 cookie 字符串
+$http->CookieManager()->setCookie("session_id", "abc123"); // Sets a single cookie
+$http->CookieManager()->setCookieString("user_id=xyz789; theme=dark"); // Sets cookie string
 $response = $http->Send()->GetResponse();
-echo $response->cookieManager->getCookieString(); // 输出: session_id=abc123; user_id=xyz789; theme=dark
+echo $response->cookieManager->getCookieString(); // Outputs: session_id=abc123; user_id=xyz789; theme=dark
 ```
 
-清除 cookie：
+Clear cookies:
 
 ```php
 $http->CookieManager()->clearCookie();
 ```
 
-### 配置代理
+### Configure Proxy
 
-设置代理（可选认证）：
+Set a proxy (with optional authentication):
 
 ```php
 $http = new HttpRequestClass("https://www.example.com");
@@ -161,30 +161,30 @@ $http->set_proxy("127.0.0.1:7890", "username", "password");
 $response = $http->Send()->GetResponse();
 ```
 
-### SSL 验证
+### SSL Verification
 
-启用或禁用 SSL 验证：
+Enable or disable SSL verification:
 
 ```php
 $http = new HttpRequestClass("https://www.example.com");
-$http->setSslVerification(false, false); // 禁用 SSL 验证
+$http->setSslVerification(false, false); // Disable SSL verification
 $response = $http->Send()->GetResponse();
 ```
 
-## 高级使用
+## Advanced Usage
 
-### 自定义 HTTP 方法
+### Custom HTTP Methods
 
-支持多种 HTTP 方法，通过 `$method` 参数指定（0=GET、1=POST 等）：
+Support for various HTTP methods, specified via the `$method` parameter (0=GET, 1=POST, etc.):
 
 ```php
-$http = new HttpRequestClass("https://www.example.com", 3); // PUT 请求
+$http = new HttpRequestClass("https://www.example.com", 3); // PUT request
 $http->Send(["data" => "value"])->GetResponse();
 ```
 
-### 处理重定向
+### Handle Redirects
 
-启用跟随重定向：
+Enable following redirects:
 
 ```php
 $http = new HttpRequestClass("https://www.example.com");
@@ -192,19 +192,19 @@ $http->set()->set_followLocation(true);
 $response = $http->Send()->GetResponse();
 ```
 
-### 设置超时
+### Set Timeout
 
-设置请求超时（秒）：
+Set request timeout (in seconds):
 
 ```php
 $http = new HttpRequestClass("https://www.example.com");
-$http->set()->timeout = 30; // 30 秒
+$http->set()->timeout = 30; // 30 seconds
 $response = $http->Send()->GetResponse();
 ```
 
-### 自定义 DNS 解析
+### Custom DNS Resolution
 
-指定自定义 DNS 解析：
+Specify custom DNS resolution:
 
 ```php
 $http = new HttpRequestClass("https://www.example.com");
@@ -212,106 +212,106 @@ $http->set()->hosts = ["example.com:443:93.184.216.34"];
 $response = $http->Send()->GetResponse();
 ```
 
-## 错误处理
+## Error Handling
 
-类在无效输入或 cURL 错误时抛出异常。始终使用 `try-catch` 块：
+The classes throw exceptions for invalid inputs or cURL errors. Always use a `try-catch` block:
 
 ```php
 try {
     $response = (new HttpRequestClass("invalid-url"))->Send()->GetResponse();
 } catch (Exception $e) {
-    echo "错误: " . $e->getMessage();
+    echo "Error: " . $e->getMessage();
 }
 ```
 
-常见异常：
-- `InvalidArgumentException`：无效 URL 或空 POST 数据。
-- `Exception`：cURL 错误，包含错误码和消息。
+Common exceptions:
+- `InvalidArgumentException`: Invalid URL or empty POST data.
+- `Exception`: cURL errors, including error code and message.
 
-## 示例代码
+## Example Code
 
-以下是一个综合示例，展示多种功能：
+The following is a comprehensive example demonstrating multiple features:
 
 ```php
 try {
-    // 初始化请求
-    $http = new HttpRequestClass("https://www.example.com", 1); // POST 请求
-    $http->set_userAgent("CustomAgent/1.0"); // 设置 User-Agent
-    $http->set()->set_headers_arr([ // 设置头信息
+    // Initialize request
+    $http = new HttpRequestClass("https://www.example.com", 1); // POST request
+    $http->set_userAgent("CustomAgent/1.0"); // Set User-Agent
+    $http->set()->set_headers_arr([ // Set headers
         "Content-Type: application/json"
     ]);
-    $http->CookieManager()->setCookie("user", "john_doe"); // 设置 cookie
-    $http->set_proxy("127.0.0.1:7890"); // 设置代理
-    $http->set()->set_followLocation(true); // 启用重定向
-    $http->set()->timeout = 20; // 设置超时
+    $http->CookieManager()->setCookie("user", "john_doe"); // Set cookie
+    $http->set_proxy("127.0.0.1:7890"); // Set proxy
+    $http->set()->set_followLocation(true); // Enable redirect
+    $http->set()->timeout = 20; // Set timeout
 
-    // 发送带数据的请求
+    // Send request with data
     $response = $http->Send(["key" => "value"])->GetResponse();
 
-    // 输出结果
-    echo "状态码: " . $response->statusCode . "\n";
-    echo "响应主体: " . $response->body . "\n";
+    // Output results
+    echo "Status Code: " . $response->statusCode . "\n";
+    echo "Response Body: " . $response->body . "\n";
     echo "Cookies: " . $response->cookieManager->getCookieString() . "\n";
-    echo "响应头: " . print_r($response->responseHeadersArray, true) . "\n";
+    echo "Response Headers: " . print_r($response->responseHeadersArray, true) . "\n";
 } catch (Exception $e) {
-    echo "错误: " . $e->getMessage();
+    echo "Error: " . $e->getMessage();
 }
 ```
 
-## 类参考
+## Class Reference
 
 ### HttpRequestClass
 
-- **构造函数**：`HttpRequestClass(string|null $url, int $method=0, mixed &$cookieManager=null)`
-- **方法**：
-    - `open(string|null $url, int $method=0)`：设置 URL 和方法。
-    - `set()`：访问 `HttpRequestParameter` 进行配置。
-    - `Send(string|array|null $data=null)`：发送请求。
-    - `GetResponse()`：获取响应数据。
-    - `CookieManager()`：访问 `CookieManager`。
-    - `set_userAgent(string $userAgent)`：设置 User-Agent。
-    - `set_Cookie_str(string $cookie)`：设置 cookie 字符串。
-    - `set_proxy(string $ip, string $user, string $pwd)`：配置代理。
-    - `setSslVerification(bool $verifyPeer, bool $verifyHost)`：配置 SSL 验证。
-    - `bindcookie(mixed &$cookieManager)`：绑定外部 cookie 管理器（与内部 `CookieManager` 同步）。
+- **Constructor**: `HttpRequestClass(string|null $url, int $method=0, mixed &$cookieManager=null)`
+- **Methods**:
+  - `open(string|null $url, int $method=0)`: Sets URL and method.
+  - `set()`: Accesses `HttpRequestParameter` for configuration.
+  - `Send(string|array|null $data=null)`: Sends request.
+  - `GetResponse()`: Retrieves response data.
+  - `CookieManager()`: Accesses `CookieManager`.
+  - `set_userAgent(string $userAgent)`: Sets User-Agent.
+  - `set_Cookie_str(string $cookie)`: Sets cookie string.
+  - `set_proxy(string $ip, string $user, string $pwd)`: Configures proxy.
+  - `setSslVerification(bool $verifyPeer, bool $verifyHost)`: Configures SSL verification.
+  - `bindcookie(mixed &$cookieManager)`: Binds external cookie manager (syncs with internal `CookieManager`).
 
 ### CookieManager
 
-- **构造函数**：`CookieManager()`
-- **方法**：
-    - `setCookie(string $name, string $value)`：设置单个 cookie。
-    - `setCookieString(string $string)`：从字符串解析并设置 cookie。
-    - `getCookieString()`：以字符串形式获取所有 cookie。
-    - `clearCookie()`：清除所有 cookie。
+- **Constructor**: `CookieManager()`
+- **Methods**:
+  - `setCookie(string $name, string $value)`: Sets a single cookie.
+  - `setCookieString(string $string)`: Parses and sets cookies from a string.
+  - `getCookieString()`: Retrieves all cookies as a string.
+  - `clearCookie()`: Clears all cookies.
 
 ### HttpRequestParameter
 
-- **属性**：
-    - `url`：请求 URL。
-    - `method`：HTTP 方法（0=GET、1=POST 等）。
-    - `data`：POST 数据。
-    - `headers`：头信息字符串。
-    - `headers_arr`：头信息数组。
-    - `CookieManager`：cookie 管理器实例。
-    - `timeout`：请求超时。
-    - `proxy`, `proxyUsername`, `proxyPassword`：代理设置。
-    - `followLocation`：启用/禁用重定向。
-    - `completeProtocolHeaders`：启用/禁用默认头信息。
-    - `hosts`：自定义 DNS 解析。
-- **方法**：
-    - `send(string|array|null $data)`：通过父类 `HttpRequestClass` 发送请求。
-    - `set_proxyUsername(string $parm)`：设置代理用户名。
-    - `set_followLocation(bool $parm)`：设置重定向行为。
-    - `set_headers_arr(array $parm)`：设置头信息数组。
+- **Properties**:
+  - `url`: Request URL.
+  - `method`: HTTP method (0=GET, 1=POST, etc.).
+  - `data`: POST data.
+  - `headers`: Headers as a string.
+  - `headers_arr`: Headers as an array.
+  - `CookieManager`: Cookie manager instance.
+  - `timeout`: Request timeout.
+  - `proxy`, `proxyUsername`, `proxyPassword`: Proxy settings.
+  - `followLocation`: Enable/disable redirects.
+  - `completeProtocolHeaders`: Enable/disable default headers.
+  - `hosts`: Custom DNS resolutions.
+- **Methods**:
+  - `send(string|array|null $data)`: Sends request via parent `HttpRequestClass`.
+  - `set_proxyUsername(string $parm)`: Sets proxy username.
+  - `set_followLocation(bool $parm)`: Sets redirect behavior.
+  - `set_headers_arr(array $parm)`: Sets headers array.
 
 ### HttpResponseData
 
-- **属性**：
-    - `statusCode`：HTTP 状态码。
-    - `requestHeaders`：请求头信息字符串。
-    - `requestHeadersArray`：请求头信息数组。
-    - `responseHeaders`：响应头信息字符串。
-    - `responseHeadersArray`：响应头信息数组。
-    - `body`：响应主体。
-    - `cookieManager`：cookie 管理器实例。
-    - `Cookie`：cookie 字符串。
+- **Properties**:
+  - `statusCode`: HTTP status code.
+  - `requestHeaders`: Request headers as a string.
+  - `requestHeadersArray`: Request headers as an array.
+  - `responseHeaders`: Response headers as a string.
+  - `responseHeadersArray`: Response headers as an array.
+  - `body`: Response body.
+  - `cookieManager`: Cookie manager instance.
+  - `Cookie`: Cookie string.
