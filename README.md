@@ -1,317 +1,284 @@
-# HttpRequestClass Usage Documentation
-
-This document provides a comprehensive guide for using `HttpRequestClass` and its related classes (`CookieManager`, `HttpRequestParameter`, `HttpResponseData`) in PHP. These classes are designed to simplify HTTP request operations, supporting methods like GET, POST, and offering cookie, header, proxy, and SSL configuration features.
-
-## Table of Contents
-1. [Overview](#overview)
-2. [Directory Structure](#directory-structure)
-3. [Key Classes and Their Purposes](#key-classes-and-their-purposes)
-4. [Installation and Setup](#installation-and-setup)
-5. [Basic Usage](#basic-usage)
-    - [Initiate GET Request](#initiate-get-request)
-    - [Initiate POST Request](#initiate-post-request)
-    - [Set Custom Headers](#set-custom-headers)
-    - [Manage Cookies](#manage-cookies)
-    - [Configure Proxy](#configure-proxy)
-    - [SSL Verification](#ssl-verification)
-6. [Advanced Usage](#advanced-usage)
-    - [Custom HTTP Methods](#custom-http-methods)
-    - [Handle Redirects](#handle-redirects)
-    - [Set Timeout](#set-timeout)
-    - [Custom DNS Resolution](#custom-dns-resolution)
-7. [Error Handling](#error-handling)
-8. [Example Code](#example-code)
-9. [Class Reference](#class-reference)
-    - [HttpRequestClass](#httprequestclass)
-    - [CookieManager](#cookiemanager)
-    - [HttpRequestParameter](#httprequestparameter)
-    - [HttpResponseData](#httpresponsedata)
+# EasyHTTP Library Documentation
 
 ## Overview
 
-`HttpRequestClass` is a PHP-based class that utilizes the cURL library to execute HTTP requests. It offers a flexible chainable interface for configuring requests, managing cookies, setting headers, and handling responses. Supporting classes include `CookieManager` (for cookie handling), `HttpRequestParameter` (for storing request parameters), and `HttpResponseData` (for storing response data).
+The **EasyHTTP** library is a versatile and user-friendly PHP library designed to simplify HTTP request operations. Built with simplicity and functionality in mind, it provides a robust set of features for handling HTTP requests, including GET, POST, PUT, DELETE, and more, while offering advanced capabilities such as cookie management, proxy configuration, SSL verification control, and custom header support. The library leverages PHP's cURL extension to ensure reliable and efficient HTTP communication, making it an excellent choice for developers seeking a lightweight yet powerful solution for web interactions.
 
-Key features include:
-- Support for multiple HTTP methods (GET, POST, HEAD, PUT, OPTIONS, DELETE, TRACE, CONNECT).
-- Cookie management via `CookieManager`.
-- Flexible header configuration in string or array format.
-- Proxy support (with authentication).
-- SSL verification options.
-- Automatic handling of response headers, cookies, and body content.
+This documentation provides a comprehensive guide to the EasyHTTP library, highlighting its ease of use, rich feature set, and practical examples to help developers quickly integrate it into their projects.
 
-## Directory Structure
+## Key Features
 
-The project is organized as follows:
+The EasyHTTP library is designed to be both intuitive and feature-rich, offering the following capabilities:
 
-```
-EasyHTTP
-├── EasyHTTP
-│   ├── CookieManager.php
-│   ├── HttpRequestClass.php
-│   ├── HttpRequestParameter.php
-│   └── HttpResponseData.php
-├── Demo.php
-└── autoload.php
-```
+- **Flexible HTTP Methods**: Supports a wide range of HTTP methods (GET, POST, HEAD, PUT, OPTIONS, DELETE, TRACE, CONNECT) with simple configuration.
+- **Cookie Management**: Provides a dedicated `CookieManager` class for seamless cookie handling, including setting, retrieving, and clearing cookies.
+- **Customizable Headers**: Allows both string-based and array-based header configurations, with automatic default headers for convenience.
+- **Proxy Support**: Configures proxy settings with optional authentication for secure and flexible network routing.
+- **SSL Verification Control**: Enables or disables SSL verification for peer and host, accommodating various security requirements.
+- **Redirect Handling**: Supports enabling or disabling automatic redirect following, with access to redirect locations.
+- **Timeout Configuration**: Allows setting custom timeout periods to manage request durations effectively.
+- **User-Agent Customization**: Simplifies setting custom User-Agent strings for requests.
+- **Comprehensive Response Handling**: Returns detailed response data, including status codes, headers, body, and cookies, in a structured format.
+- **Error Handling**: Implements robust exception handling to ensure reliable operation and clear error messages.
+- **Fluent Interface**: Offers a chainable method design for intuitive and readable code.
 
-- **`EasyHTTP/`**: Root directory containing subdirectories and key files.
-  - **`EasyHTTP/`**: Houses core PHP classes.
-    - **`CookieManager.php`**: Manages cookie operations.
-    - **`HttpRequestClass.php`**: Core request execution class.
-    - **`HttpRequestParameter.php`**: Manages request parameters.
-    - **`HttpResponseData.php`**: Stores response data.
-  - **`Demo.php`**: Located in the root directory, contains usage examples.
-  - **`autoload.php`**: Located in the root directory, implements SPL autoloading.
+## Installation
 
-## Key Classes and Their Purposes
+To use the EasyHTTP library, ensure you have PHP installed with the cURL extension enabled. Follow these steps:
 
-- **HttpRequestClass**: Main class for initiating and sending HTTP requests, managing cURL handles and coordinating other classes.
-- **CookieManager**: Handles cookie storage, setting, and retrieval, supporting single cookies and cookie strings.
-- **HttpRequestParameter**: Stores request parameters (e.g., URL, method, headers, proxy settings), providing a chainable configuration interface.
-- **HttpResponseData**: Stores response data, including status code, headers, body, and cookies.
-
-## Installation and Setup
-
-1. Ensure the server has PHP installed with the cURL extension enabled.
-2. Save the provided PHP code as a file (e.g., `HttpRequestClass.php`).
-3. Include the file in your PHP project:
+1. Place the `EasyHTTP` directory containing the library files (`HttpRequestClass.php`, `HttpRequestParameter.php`, `HttpResponseData.php`, `CookieManager.php`) in your project directory.
+2. Include the `autoload.php` file in your project to automatically load the required classes:
 
 ```php
-require_once 'HttpRequestClass.php';
+require_once __DIR__ . '/autoload.php';
 ```
 
-## Basic Usage
-
-### Initiate GET Request
-
-Execute a simple GET request:
+3. Use the `EasyHTTP` namespace to access the library's classes:
 
 ```php
+use EasyHTTP\HttpRequestClass;
+```
+
+## Usage Examples
+
+The following examples demonstrate the library's ease of use and versatility, covering common use cases and advanced features.
+
+### 1. Basic GET Request
+
+Perform a simple GET request to retrieve data from a URL:
+
+```php
+use EasyHTTP\HttpRequestClass;
+
 try {
-    $response = (new HttpRequestClass("https://www.example.com"))->Send()->GetResponse();
-    echo $response->body; // Outputs response body
-    echo $response->cookieManager->getCookieString(); // Outputs cookies
+    $response = (new HttpRequestClass('http://example.com'))
+        ->Send()
+        ->getResponse();
+    echo $response->body; // Output response body
 } catch (Exception $e) {
-    echo "Error: " . $e->getMessage();
+    echo $e->getMessage();
 }
 ```
 
-Or use the `open` method:
+This example showcases the library's straightforward syntax for initiating a GET request and retrieving the response body.
+
+### 2. Alternative GET Request Pattern
+
+The library supports an alternative pattern for configuring requests:
 
 ```php
 $http = new HttpRequestClass();
-$http->open("https://www.example.com");
-$http->Send();
-echo $http->GetResponse()->body; // Outputs response body
-```
-
-### Initiate POST Request
-
-Execute a POST request with data:
-
-```php
 try {
-    $response = (new HttpRequestClass("https://www.example.com", 1))
-        ->Send(["KeyWord" => "Post request"])
-        ->GetResponse();
-    echo $response->body; // Outputs response body
+    $response = $http->open('http://example.com')
+        ->Send()
+        ->getResponse();
+    echo $response->body;
 } catch (Exception $e) {
-    echo "Error: " . $e->getMessage();
+    echo $e->getMessage();
 }
 ```
 
-### Set Custom Headers
+The `open` method allows setting the URL and method dynamically, enhancing flexibility.
 
-Set headers using an array or string:
+### 3. GET Request with Custom User-Agent
 
-```php
-$http = new HttpRequestClass("https://www.example.com");
-$http->set()->set_headers_arr([
-    "Content-Type: application/json",
-    "Authorization: Bearer token123"
-]);
-$response = $http->Send()->GetResponse();
-```
-
-### Manage Cookies
-
-Set cookies using `CookieManager`:
+Customize the User-Agent for a GET request:
 
 ```php
-$http = new HttpRequestClass("https://www.example.com");
-$http->CookieManager()->setCookie("session_id", "abc123"); // Sets a single cookie
-$http->CookieManager()->setCookieString("user_id=xyz789; theme=dark"); // Sets cookie string
-$response = $http->Send()->GetResponse();
-echo $response->cookieManager->getCookieString(); // Outputs: session_id=abc123; user_id=xyz789; theme=dark
+try {
+    $response = (new HttpRequestClass('http://example.com'))
+        ->set_userAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64)')
+        ->Send()
+        ->getResponse();
+    echo $response->body;
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
 ```
 
-Clear cookies:
+This feature is useful for mimicking specific browser behaviors or meeting API requirements.
+
+### 4. POST Request with Form Data
+
+Send a POST request with form data:
 
 ```php
-$http->CookieManager()->clearCookie();
+try {
+    $response = (new HttpRequestClass('https://postman-echo.com/post', 1)) // 1 = POST
+        ->Send([
+            'username' => 'john_doe',
+            'password' => 'secure123'
+        ])
+        ->getResponse();
+    echo "POST Response: " . $response->body;
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
 ```
 
-### Configure Proxy
+The library simplifies sending POST data, supporting both array and string formats.
 
-Set a proxy (with optional authentication):
+### 5. Cookie Management
+
+Manage cookies for persistent sessions:
 
 ```php
-$http = new HttpRequestClass("https://www.example.com");
-$http->set_proxy("127.0.0.1:7890", "username", "password");
-$response = $http->Send()->GetResponse();
+try {
+    $http = new HttpRequestClass('http://example.com');
+    $http->set_Cookie_str('session_id=abc123; user_pref=dark_mode');
+    $response = $http->Send()->getResponse();
+    echo $response->cookieManager->getCookieString(); // Output cookies
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
 ```
 
-### SSL Verification
+The `CookieManager` class handles cookie parsing, storage, and retrieval, automatically maintaining cookies across requests.
 
-Enable or disable SSL verification:
+### 6. Advanced Cookie Management
+
+For more granular control, use the `CookieManager` directly:
 
 ```php
-$http = new HttpRequestClass("https://www.example.com");
-$http->setSslVerification(false, false); // Disable SSL verification
-$response = $http->Send()->GetResponse();
+try {
+    $http = new HttpRequestClass();
+    $cookieManager = $http->CookieManager();
+    $cookieManager->setCookie('language', 'zh-CN')
+                  ->setCookie('theme', 'dark');
+    $response = $http->open('http://example.com')
+                     ->Send()
+                     ->getResponse();
+    echo "Current Cookies: " . $cookieManager->getCookieString();
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
 ```
 
-## Advanced Usage
+This allows fine-tuned cookie operations, such as setting or deleting specific cookies.
 
-### Custom HTTP Methods
+### 7. Handling Redirects
 
-Support for various HTTP methods, specified via the `$method` parameter (0=GET, 1=POST, etc.):
+Control redirect behavior and access redirect information:
 
 ```php
-$http = new HttpRequestClass("https://www.example.com", 3); // PUT request
-$http->Send(["data" => "value"])->GetResponse();
+try {
+    $http = new HttpRequestClass('http://example.com/redirect');
+    $http->set()->followLocation = false; // Disable auto-redirect
+    $response = $http->Send()->getResponse();
+    if ($response->statusCode >= 300 && $response->statusCode < 400) {
+        $location = $response->responseHeadersArray['Location'] ?? '';
+        echo "Redirect to: " . $location;
+    }
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
 ```
 
-### Handle Redirects
+This feature is useful for debugging or manually handling redirects.
 
-Enable following redirects:
+### 8. Proxy Configuration
+
+Configure a proxy for requests:
 
 ```php
-$http = new HttpRequestClass("https://www.example.com");
-$http->set()->set_followLocation(true);
-$response = $http->Send()->GetResponse();
+try {
+    $response = (new HttpRequestClass('http://example.com'))
+        ->set_proxy('127.0.0.1:8080', 'proxy_user', 'proxy_pass')
+        ->Send()
+        ->getResponse();
+    echo $response->body;
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
 ```
 
-### Set Timeout
+The library supports authenticated proxies, making it suitable for secure environments.
 
-Set request timeout (in seconds):
+### 9. SSL Verification Control
+
+Disable SSL verification for specific scenarios:
 
 ```php
-$http = new HttpRequestClass("https://www.example.com");
-$http->set()->timeout = 30; // 30 seconds
-$response = $http->Send()->GetResponse();
+try {
+    $response = (new HttpRequestClass('https://example.com'))
+        ->setSslVerification(false, false)
+        ->Send()
+        ->getResponse();
+    echo $response->body;
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
 ```
 
-### Custom DNS Resolution
+This flexibility is ideal for testing or environments with self-signed certificates.
 
-Specify custom DNS resolution:
+### 10. Custom Headers
+
+Set custom headers for requests:
 
 ```php
-$http = new HttpRequestClass("https://www.example.com");
-$http->set()->hosts = ["example.com:443:93.184.216.34"];
-$response = $http->Send()->GetResponse();
+try {
+    $http = new HttpRequestClass('http://example.com');
+    $http->set()->headers_arr = [
+        'Authorization' => 'Bearer xyz123',
+        'X-Custom-Header' => 'value'
+    ];
+    $response = $http->Send()->getResponse();
+    var_dump($response->responseHeadersArray);
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
 ```
+
+The library supports both array-based and string-based headers, with intelligent merging of defaults.
+
+### 11. Timeout Configuration
+
+Set a custom timeout for requests:
+
+```php
+try {
+    $http = new HttpRequestClass('http://example.com');
+    $http->set()->timeout = 5; // Set timeout to 5 seconds
+    $response = $http->Send()->getResponse();
+    echo $response->body;
+} catch (Exception $e) {
+    echo "Timeout Error: " . $e->getMessage();
+}
+```
+
+This ensures requests do not hang indefinitely, improving application reliability.
+
+## Class Structure
+
+The EasyHTTP library consists of four main classes, each with a specific role:
+
+1. **HttpRequestClass**: The core class for initiating and configuring HTTP requests. It provides methods for setting URLs, methods, headers, proxies, and more, with a fluent interface for chaining operations.
+2. **HttpRequestParameter**: Manages request parameters, such as URL, method, headers, cookies, and timeouts, allowing fine-grained control over request settings.
+3. **HttpResponseData**: Stores response data, including the body, status code, headers, and cookies, in a structured format for easy access.
+4. **CookieManager**: Handles cookie operations, including setting, retrieving, and clearing cookies, with support for string and key-value pair formats.
 
 ## Error Handling
 
-The classes throw exceptions for invalid inputs or cURL errors. Always use a `try-catch` block:
+The library uses PHP's exception handling to manage errors gracefully. Common exceptions include:
 
-```php
-try {
-    $response = (new HttpRequestClass("invalid-url"))->Send()->GetResponse();
-} catch (Exception $e) {
-    echo "Error: " . $e->getMessage();
-}
-```
+- **InvalidArgumentException**: Thrown for invalid URLs or empty POST data.
+- **Exception**: Thrown for cURL errors, with detailed error codes and messages.
 
-Common exceptions:
-- `InvalidArgumentException`: Invalid URL or empty POST data.
-- `Exception`: cURL errors, including error code and message.
+All methods that interact with the network are wrapped in try-catch blocks in the provided examples, ensuring robust error handling in production code.
 
-## Example Code
+## Best Practices
 
-The following is a comprehensive example demonstrating multiple features:
+To maximize the library's effectiveness, consider the following:
 
-```php
-try {
-    // Initialize request
-    $http = new HttpRequestClass("https://www.example.com", 1); // POST request
-    $http->set_userAgent("CustomAgent/1.0"); // Set User-Agent
-    $http->set()->set_headers_arr([ // Set headers
-        "Content-Type: application/json"
-    ]);
-    $http->CookieManager()->setCookie("user", "john_doe"); // Set cookie
-    $http->set_proxy("127.0.0.1:7890"); // Set proxy
-    $http->set()->set_followLocation(true); // Enable redirect
-    $http->set()->timeout = 20; // Set timeout
+- **Use Fluent Interface**: Chain methods like `open`, `set`, `Send`, and `getResponse` for readable code.
+- **Handle Exceptions**: Always wrap network operations in try-catch blocks to handle errors gracefully.
+- **Leverage Cookie Management**: Use the `CookieManager` for session persistence across multiple requests.
+- **Set Appropriate Timeouts**: Configure timeouts to prevent long-running requests from blocking your application.
+- **Validate URLs**: Ensure URLs are valid before sending requests to avoid exceptions.
 
-    // Send request with data
-    $response = $http->Send(["key" => "value"])->GetResponse();
+## Conclusion
 
-    // Output results
-    echo "Status Code: " . $response->statusCode . "\n";
-    echo "Response Body: " . $response->body . "\n";
-    echo "Cookies: " . $response->cookieManager->getCookieString() . "\n";
-    echo "Response Headers: " . print_r($response->responseHeadersArray, true) . "\n";
-} catch (Exception $e) {
-    echo "Error: " . $e->getMessage();
-}
-```
+The EasyHTTP library is a powerful and intuitive tool for PHP developers, offering a comprehensive set of features wrapped in a simple, chainable interface. Whether you're performing basic GET requests, managing complex cookie sessions, or configuring proxies and custom headers, EasyHTTP provides the flexibility and reliability needed for modern web development. Its robust error handling, detailed response data, and support for advanced HTTP features make it an ideal choice for both simple scripts and complex applications.
 
-## Class Reference
-
-### HttpRequestClass
-
-- **Constructor**: `HttpRequestClass(string|null $url, int $method=0, mixed &$cookieManager=null)`
-- **Methods**:
-  - `open(string|null $url, int $method=0)`: Sets URL and method.
-  - `set()`: Accesses `HttpRequestParameter` for configuration.
-  - `Send(string|array|null $data=null)`: Sends request.
-  - `GetResponse()`: Retrieves response data.
-  - `CookieManager()`: Accesses `CookieManager`.
-  - `set_userAgent(string $userAgent)`: Sets User-Agent.
-  - `set_Cookie_str(string $cookie)`: Sets cookie string.
-  - `set_proxy(string $ip, string $user, string $pwd)`: Configures proxy.
-  - `setSslVerification(bool $verifyPeer, bool $verifyHost)`: Configures SSL verification.
-  - `bindcookie(mixed &$cookieManager)`: Binds external cookie manager (syncs with internal `CookieManager`).
-
-### CookieManager
-
-- **Constructor**: `CookieManager()`
-- **Methods**:
-  - `setCookie(string $name, string $value)`: Sets a single cookie.
-  - `setCookieString(string $string)`: Parses and sets cookies from a string.
-  - `getCookieString()`: Retrieves all cookies as a string.
-  - `clearCookie()`: Clears all cookies.
-
-### HttpRequestParameter
-
-- **Properties**:
-  - `url`: Request URL.
-  - `method`: HTTP method (0=GET, 1=POST, etc.).
-  - `data`: POST data.
-  - `headers`: Headers as a string.
-  - `headers_arr`: Headers as an array.
-  - `CookieManager`: Cookie manager instance.
-  - `timeout`: Request timeout.
-  - `proxy`, `proxyUsername`, `proxyPassword`: Proxy settings.
-  - `followLocation`: Enable/disable redirects.
-  - `completeProtocolHeaders`: Enable/disable default headers.
-  - `hosts`: Custom DNS resolutions.
-- **Methods**:
-  - `send(string|array|null $data)`: Sends request via parent `HttpRequestClass`.
-  - `set_proxyUsername(string $parm)`: Sets proxy username.
-  - `set_followLocation(bool $parm)`: Sets redirect behavior.
-  - `set_headers_arr(array $parm)`: Sets headers array.
-
-### HttpResponseData
-
-- **Properties**:
-  - `statusCode`: HTTP status code.
-  - `requestHeaders`: Request headers as a string.
-  - `requestHeadersArray`: Request headers as an array.
-  - `responseHeaders`: Response headers as a string.
-  - `responseHeadersArray`: Response headers as an array.
-  - `body`: Response body.
-  - `cookieManager`: Cookie manager instance.
-  - `Cookie`: Cookie string.
+For further details or to contribute to the library, visit [https://github.com/thiswod/EasyHTTP](https://github.com/thiswod/EasyHTTP).
