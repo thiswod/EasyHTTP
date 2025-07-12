@@ -7,10 +7,10 @@
  * @author Wod
  * @version 1.0.0
  * @license MIT
- * @link https://github.com/Wod/HttpRequestClass
+ * @link https://github.com/thiswod/EasyHTTP
  * @package Http
  * @category Http
- * @package HttpRequestClass
+ * @package EasyHTTP
  * @copyright (c) 2025 Wod. All rights reserved.
  */
 namespace EasyHTTP;
