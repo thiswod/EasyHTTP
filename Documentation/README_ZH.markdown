@@ -3,9 +3,6 @@
 ## Language Navigation
 [中文文档](README_ZH.markdown) | [Documentación en Español](README_ES.markdown) | [日本語ドキュメント](README_JA.markdown) | [한국어 문서](README_KO.markdown) | [Документация на русском](README_RU.markdown) | [Dokumentation auf Deutsch](README_DE.markdown)
 
-## Language Navigation
-[中文文档](Documentation/README_ZH.markdown) | [Documentación en Español](Documentation/README_ES.markdown) | [日本語ドキュメント](Documentation/README_JA.markdown) | [한국어 문서](Documentation/README_KO.markdown) | [Документация на русском](Documentation/README_RU.markdown) | [Dokumentation auf Deutsch](Documentation/README_DE.markdown)
-
 ## 概述
 
 **EasyHTTP** 是一个多功能且易于使用的 PHP 库，旨在简化 HTTP 请求操作。该库以简单性和功能性为核心，提供了一系列强大的功能，用于处理包括 GET、POST、PUT、DELETE 等在内的 HTTP 请求，同时支持高级功能，如 Cookie 管理、代理配置、SSL 验证控制和自定义请求头支持。EasyHTTP 利用 PHP 的 cURL 扩展，确保可靠且高效的 HTTP 通信，是开发者寻求轻量级但功能强大的网络交互解决方案的理想选择。
