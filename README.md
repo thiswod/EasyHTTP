@@ -284,4 +284,4 @@ To maximize the library's effectiveness, consider the following:
 
 The EasyHTTP library is a powerful and intuitive tool for PHP developers, offering a comprehensive set of features wrapped in a simple, chainable interface. Whether you're performing basic GET requests, managing complex cookie sessions, or configuring proxies and custom headers, EasyHTTP provides the flexibility and reliability needed for modern web development. Its robust error handling, detailed response data, and support for advanced HTTP features make it an ideal choice for both simple scripts and complex applications.
 
-For further details or to contribute to the library, visit [https://github.com/Wod/HttpRequestClass](https://github.com/Wod/HttpRequestClass).
+For further details or to contribute to the library, visit [https://github.com/thiswod/EasyHTTP](https://github.com/thiswod/EasyHTTP).
