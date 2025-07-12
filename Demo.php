@@ -53,7 +53,8 @@ class Demo
          * 发送POST请求
          */
         try {
-            $response = (new HttpRequestClass('https://www.example.com', 1))->Send(['data' => 'POST数据']);
+            $response = (new HttpRequestClass('https://www.example.com', 1))
+                ->Send(['data' => 'Post request']);
         } catch (Exception $e) {
             echo $e->getMessage();
         }
@@ -61,7 +62,9 @@ class Demo
          * 带Cookie进行请求
          */
         try {
-            $response = (new HttpRequestClass('https://www.example.com', 1))->set_Cookie_str('Cookie1=value1; Cookie2=value2')->Send();
+            $response = (new HttpRequestClass('https://www.example.com', 1))
+                ->set_Cookie_str('Cookie1=value1; Cookie2=value2')
+                ->Send();
             //$response->set_Cookie_str('Cookie1=value1; Cookie2=value2');
             //$response->Send();
         } catch (Exception $e) {
