@@ -1,5 +1,8 @@
 # EasyHTTP Library Documentation
 
+## Language Navigation
+[中文文档](Documentation/README_ZH.markdown) | [Documentación en Español](Documentation/README_ES.markdown) | [日本語ドキュメント](Documentation/README_JA.markdown) | [한국어 문서](Documentation/README_KO.markdown) | [Документация на русском](Documentation/README_RU.markdown) | [Dokumentation auf Deutsch](Documentation/README_DE.markdown)
+
 ## Overview
 
 The **EasyHTTP** library is a versatile and user-friendly PHP library designed to simplify HTTP request operations. Built with simplicity and functionality in mind, it provides a robust set of features for handling HTTP requests, including GET, POST, PUT, DELETE, and more, while offering advanced capabilities such as cookie management, proxy configuration, SSL verification control, and custom header support. The library leverages PHP's cURL extension to ensure reliable and efficient HTTP communication, making it an excellent choice for developers seeking a lightweight yet powerful solution for web interactions.
@@ -281,4 +284,4 @@ To maximize the library's effectiveness, consider the following:
 
 The EasyHTTP library is a powerful and intuitive tool for PHP developers, offering a comprehensive set of features wrapped in a simple, chainable interface. Whether you're performing basic GET requests, managing complex cookie sessions, or configuring proxies and custom headers, EasyHTTP provides the flexibility and reliability needed for modern web development. Its robust error handling, detailed response data, and support for advanced HTTP features make it an ideal choice for both simple scripts and complex applications.
 
-For further details or to contribute to the library, visit [https://github.com/thiswod/EasyHTTP](https://github.com/thiswod/EasyHTTP).
+For further details or to contribute to the library, visit [https://github.com/Wod/HttpRequestClass](https://github.com/Wod/HttpRequestClass).
